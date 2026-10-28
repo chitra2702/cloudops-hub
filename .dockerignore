@@ -1,0 +1,9 @@
+.git
+.terraform
+*.tfstate
+*.tfstate.*
+*.tfvars
+.env
+.env.*
+README.md
+docker-compose.yml

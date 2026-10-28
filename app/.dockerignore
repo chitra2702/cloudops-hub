@@ -1,0 +1,9 @@
+cat > app/.dockerignore <<'EOF'
+.git
+*.tfstate
+*.tfstate.*
+*.tfvars
+.env
+.env.*
+Dockerfile.save
+EOF

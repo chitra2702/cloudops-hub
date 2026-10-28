@@ -1,0 +1,8 @@
+services:
+  cloudops-hub:
+    build:
+      context: ./app
+    container_name: cloudops-hub
+    ports:
+      - "8080:80"
+    restart: unless-stopped
