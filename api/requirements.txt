@@ -1,0 +1,3 @@
+boto3      #reads metrics from AWS CloudWatch
+flask      #creates a small API for your dashboard to request those metrics 
+gunicorn   #runs the API server

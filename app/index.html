@@ -78,7 +78,7 @@ h1 { font-family:var(--site-font-heading); font-size:calc(27px * var(--site-head
 .ring { width:90px;height:90px;flex:0 0 90px; }
 .score-number { font-size:25px;font-weight:800;letter-spacing:-1px; }
 .score-caption { color:light-dark(#8590a4,#8e9db8);font-size:10px;margin-top:5px; }
-.health-list { display:grid;gap:16px;padding-top:20px; }
+.health-list { display:grid; gap:16px; padding:20px; }
 .health-item { display:grid;grid-template-columns:1fr auto;gap:7px;align-items:center;font-size:11px; }
 .health-item .label { color:light-dark(#67748b,#9ba8c1); }
 .health-item .val { font-weight:800; }
@@ -134,27 +134,37 @@ tr:last-child td { border-bottom:0; }
       <div class="nav-label">MANAGE</div>
       <nav class="nav"><button data-page="Settings"><span class="nav-icon">⚙</span>Settings</button><button data-page="Documentation"><span class="nav-icon">▤</span>Documentation</button></nav>
     </div>
-    <div class="sidebar-bottom"><div class="plan-card"><strong>✦ Project workspace</strong><p>Infrastructure as Code · AWS eu-north-1<br>Prototype dashboard — demo metrics</p><button id="docsBtn">View project notes ↗</button></div></div>
+    <div class="sidebar-bottom"><div class="plan-card"><strong>✦ Project workspace</strong><p>Infrastructure as Code · AWS eu-north-1<br>AWS EC2 · Live CloudWatch monitoring</p><button id="docsBtn">View project notes ↗</button></div></div>
   </aside>
   <main class="main">
     <header class="topbar"><div class="crumb">Workspace&nbsp; / &nbsp;<strong id="breadcrumb">Overview</strong></div><div class="top-actions"><input class="search" id="search" placeholder="⌕  Search dashboard..." aria-label="Search dashboard"><button class="icon-btn" id="refresh" aria-label="Refresh dashboard">↻</button><button class="icon-btn" id="notifications" aria-label="Notifications">♧</button><div class="avatar">CM</div></div></header>
     <div class="content">
-      <div class="heading-row"><div><div class="live-pill"><span class="dot"></span> SYSTEM OPERATIONAL <span style="opacity:.65">· DEMO DATA</span></div><h1 style="margin-top:14px">Cloud operations overview</h1><p class="subtitle">A single view of your cloud infrastructure, releases and application health.</p></div><div class="heading-actions"><button class="btn" id="exportBtn">↓ Export report</button><button class="btn primary" id="deployBtn">＋ New deployment</button></div></div>
-      <section class="metrics" aria-label="Key metrics">
-        <article class="card metric"><div class="metric-top"><span>Infrastructure resources</span><span class="metric-symbol">◫</span></div><div class="metric-value">12</div><div class="metric-foot"><span class="up">● Tracked by Terraform</span></div></article>
-        <article class="card metric"><div class="metric-top"><span>Service availability</span><span class="metric-symbol">◉</span></div><div class="metric-value">99.98<span style="font-size:15px">%</span></div><div class="metric-foot"><span class="up">↑ 0.03%</span> vs previous period · demo</div></article>
-        <article class="card metric"><div class="metric-top"><span>Successful deployments</span><span class="metric-symbol">⇧</span></div><div class="metric-value">24</div><div class="metric-foot"><span class="up">↑ 8 releases</span> this month · demo</div></article>
-        <article class="card metric"><div class="metric-top"><span>Active alerts</span><span class="metric-symbol">♧</span></div><div class="metric-value">02</div><div class="metric-foot"><span style="color:#e7a53b;font-weight:800">● 1 warning</span> · 1 informational</div></article>
+      <div class="heading-row"><div><div class="live-pill"><span class="dot"></span> AWS MONITORING <span style="opacity:.65">· CLOUDWATCH</span></div><h1 style="margin-top:14px">EC2 Infrastructure Monitoring</h1><p class="subtitle">Live CPU, memory and disk metrics from AWS CloudWatch.</p></div><div class="heading-actions"><button class="btn" id="refreshMetrics">↻ Refresh metrics</button></div></div>
+      <section class="metrics" aria-label="Live EC2 metrics">
+        <article class="card metric"><div class="metric-top"><span>CPU utilization</span><span class="metric-symbol">⌁</span></div><div class="metric-value" id="cpuValue">Loading...</div><div class="progress"><span id="cpuBar" style="width:0%"></span></div><div class="metric-foot">AWS/EC2 · CPUUtilization</div></article>
+        <article class="card metric"><div class="metric-top"><span>Memory utilization</span><span class="metric-symbol">▤</span></div><div class="metric-value" id="memoryValue">Loading...</div><div class="progress"><span id="memoryBar" style="width:0%;background:linear-gradient(90deg,#e9b04b,#f2ca70)"></span></div><div class="metric-foot">CWAgent · mem_used_percent</div></article>
+        <article class="card metric"><div class="metric-top"><span>Disk utilization</span><span class="metric-symbol">▣</span></div><div class="metric-value" id="diskValue">Loading...</div><div class="progress"><span id="diskBar" style="width:0%;background:linear-gradient(90deg,#37c9ae,#5cdbbe)"></span></div><div class="metric-foot">CWAgent · disk_used_percent</div></article>
       </section>
       <section class="mid-grid">
-        <article class="card"><div class="card-head"><div><div class="card-title">Application performance</div><div class="card-desc">Illustrative request latency and throughput · not live telemetry</div></div><select class="select-small" id="period"><option value="7">Last 7 days</option><option value="24">Last 24 hours</option><option value="30">Last 30 days</option></select></div><div class="chart-area"><svg id="performanceChart" viewBox="0 0 650 225" role="img" aria-label="Illustrative application performance line chart"><defs><linearGradient id="areaBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6478ff" stop-opacity=".22"/><stop offset="1" stop-color="#6478ff" stop-opacity="0"/></linearGradient></defs><g stroke="currentColor" opacity=".09" stroke-dasharray="4 5"><line x1="44" y1="25" x2="630" y2="25"/><line x1="44" y1="67" x2="630" y2="67"/><line x1="44" y1="109" x2="630" y2="109"/><line x1="44" y1="151" x2="630" y2="151"/><line x1="44" y1="193" x2="630" y2="193"/></g><g fill="currentColor" opacity=".55" font-size="10"><text x="7" y="29">300</text><text x="7" y="71">225</text><text x="7" y="113">150</text><text x="15" y="155">75</text><text x="20" y="197">0</text><text x="44" y="217">Mon</text><text x="137" y="217">Tue</text><text x="230" y="217">Wed</text><text x="323" y="217">Thu</text><text x="416" y="217">Fri</text><text x="509" y="217">Sat</text><text x="602" y="217">Sun</text></g><path id="areaPath" d="M44 126 L137 112 L230 124 L323 78 L416 91 L509 55 L602 68 L602 193 L44 193 Z" fill="url(#areaBlue)"/><path id="latencyPath" d="M44 126 L137 112 L230 124 L323 78 L416 91 L509 55 L602 68" fill="none" stroke="#667aff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path id="trafficPath" d="M44 157 L137 143 L230 151 L323 132 L416 141 L509 115 L602 124" fill="none" stroke="#37c9ae" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><g fill="#667aff" stroke="light-dark(#fff,#111c30)" stroke-width="2"><circle cx="44" cy="126" r="4"/><circle cx="137" cy="112" r="4"/><circle cx="230" cy="124" r="4"/><circle cx="323" cy="78" r="4"/><circle cx="416" cy="91" r="4"/><circle cx="509" cy="55" r="4"/><circle cx="602" cy="68" r="4"/></g></svg></div><div class="chart-legend"><span><i class="legend-dot" style="background:#667aff"></i>Latency (ms)</span><span><i class="legend-dot" style="background:#37c9ae"></i>Requests / min (scaled)</span><span style="margin-left:auto">Sample series</span></div></article>
-        <article class="card"><div class="card-head"><div><div class="card-title">Infrastructure health</div><div class="card-desc">Illustrative health snapshot</div></div><span style="font-size:17px;color:#32c995">⌁</span></div><div class="health-body"><div class="health-score"><svg class="ring" viewBox="0 0 100 100" aria-label="Illustrative 94 percent health score"><circle cx="50" cy="50" r="40" fill="none" stroke="light-dark(#edf0f6,#26334a)" stroke-width="9"/><circle cx="50" cy="50" r="40" fill="none" stroke="#36c99a" stroke-width="9" stroke-linecap="round" stroke-dasharray="236 252" transform="rotate(-90 50 50)"/><text x="50" y="48" text-anchor="middle" fill="currentColor" font-size="23" font-weight="800">94</text><text x="50" y="63" text-anchor="middle" fill="currentColor" opacity=".6" font-size="9">/ 100</text></svg><div><div style="font-size:13px;font-weight:800;margin-bottom:5px">Healthy overall</div><div class="score-caption">Demo score · not calculated from AWS</div><div style="margin-top:10px;color:#28b985;font-size:10px;font-weight:800">● Within expected range</div></div></div><div class="health-list"><div class="health-item"><span class="label">Compute utilization</span><span class="val">42%</span><div class="progress"><span style="width:42%"></span></div></div><div class="health-item"><span class="label">Memory utilization</span><span class="val">61%</span><div class="progress"><span style="width:61%;background:linear-gradient(90deg,#e9b04b,#f2ca70)"></span></div></div><div class="health-item"><span class="label">Disk utilization</span><span class="val">28%</span><div class="progress"><span style="width:28%;background:linear-gradient(90deg,#37c9ae,#5cdbbe)"></span></div></div></div></div></article>
+        <article class="card">
+          <div class="card-head"><div><div class="card-title">EC2 instance details</div><div class="card-desc">Monitored AWS infrastructure</div></div><span style="color:#32c995">● Connected</span></div>
+          <div class="health-list">
+            <div class="health-item"><span class="label">Instance ID</span><strong>i-082b5a3e5235cf8c4</strong></div>
+            <div class="health-item"><span class="label">AWS Region</span><strong>eu-north-1</strong></div>
+            <div class="health-item"><span class="label">Metrics source</span><strong>Amazon CloudWatch</strong></div>
+            <div class="health-item"><span class="label">Refresh interval</span><strong>60 seconds</strong></div>
+          </div>
+        </article>
+        <article class="card">
+          <div class="card-head"><div><div class="card-title">Monitoring status</div><div class="card-desc">Live metrics API connection</div></div></div>
+          <div class="health-list">
+            <div class="health-item"><span class="label">API connection</span><strong id="apiStatus">Checking...</strong></div>
+            <div class="health-item"><span class="label">Last metric update</span><strong id="metricUpdated">Waiting for data...</strong></div>
+          </div>
+        </article>
       </section>
-      <section class="bottom-grid">
-        <article class="card"><div class="card-head"><div><div class="card-title">Recent deployments</div><div class="card-desc">Release activity across your application environments</div></div><button class="btn" id="viewDeployments" style="padding:7px 10px;font-size:10px">View all ↗</button></div><div class="table-wrap"><table><thead><tr><th>Release</th><th>Environment</th><th>Status</th><th>Time</th></tr></thead><tbody id="deployRows"><tr><td><div class="commit"><span class="commit-icon">⇧</span><span><strong>Dashboard UI refresh</strong><small>release · a82f1c9</small></span></div></td><td>Production</td><td><span class="status ok">● Success</span></td><td>12 min ago</td></tr><tr><td><div class="commit"><span class="commit-icon">⇧</span><span><strong>Health-check endpoint</strong><small>release · 1cd42ab</small></span></div></td><td>Staging</td><td><span class="status running">● In progress</span></td><td>38 min ago</td></tr><tr><td><div class="commit"><span class="commit-icon">⇧</span><span><strong>Container base update</strong><small>release · 72b9e10</small></span></div></td><td>Development</td><td><span class="status ok">● Success</span></td><td>2 hours ago</td></tr><tr><td><div class="commit"><span class="commit-icon">⇧</span><span><strong>Infra policy validation</strong><small>workflow · f09a61d</small></span></div></td><td>Staging</td><td><span class="status failed">● Failed</span></td><td>Yesterday</td></tr></tbody></table></div></article>
-        <article class="card"><div class="card-head"><div><div class="card-title">Recent alerts</div><div class="card-desc">Events that may need your attention</div></div><button class="btn" id="allAlerts" style="padding:7px 10px;font-size:10px">All alerts ↗</button></div><div class="alerts"><div class="alert-row"><div class="alert-icon warn">⚠</div><div class="alert-copy"><strong>CPU threshold approaching</strong><p>Illustrative event · compute usage crossed 75% warning threshold.</p></div><div class="alert-time">8m</div></div><div class="alert-row"><div class="alert-icon info">ⓘ</div><div class="alert-copy"><strong>Deployment awaiting approval</strong><p>Illustrative event · staging release is waiting for a reviewer.</p></div><div class="alert-time">26m</div></div><div class="alert-row"><div class="alert-icon good">✓</div><div class="alert-copy"><strong>Infrastructure plan passed</strong><p>Terraform validation completed successfully in the demo workflow.</p></div><div class="alert-time">1h</div></div></div></article>
-      </section>
-      <div class="footer"><span>© 2026 CloudOps Hub · Portfolio project</span><span><span style="color:#dba342">●</span> Demo data · AWS integration not connected yet</span><span>Region target: eu-north-1</span></div>
+
+      <div class="footer"><span>© 2026 CloudOps Hub · Portfolio project</span><span><span style="color:#dba342">●</span> Live CPU · Memory · Disk metrics via CloudWatch</span><span>Region target: eu-north-1</span></div>
     </div>
   </main>
 </div>
@@ -171,18 +181,71 @@ document.querySelectorAll('[data-page]').forEach(button => button.addEventListen
   title.textContent = button.dataset.page === 'Overview' ? 'Cloud operations overview' : button.dataset.page;
   if (button.dataset.page !== 'Overview') notify(button.dataset.page + ' view is a prototype section; integration comes in the next build phase.');
 }));
-document.getElementById('refresh').addEventListener('click', () => notify('Dashboard refreshed. Metrics are illustrative demo data.'));
-document.getElementById('notifications').addEventListener('click', () => notify('You have 2 demo alerts to review.'));
-document.getElementById('docsBtn').addEventListener('click', () => notify('Project notes: Terraform · AWS VPC · Docker · GitHub Actions · CloudWatch.'));
-document.getElementById('deployBtn').addEventListener('click', () => notify('Deployment workflow will be connected to GitHub Actions in Phase 4.'));
-document.getElementById('viewDeployments').addEventListener('click', () => { document.querySelector('[data-page="Deployments"]').click(); });
-document.getElementById('allAlerts').addEventListener('click', () => { document.querySelector('[data-page="Alerts"]').click(); });
-document.getElementById('search').addEventListener('keydown', event => { if (event.key === 'Enter') { const q = event.target.value.trim().toLowerCase(); const rows = [...document.querySelectorAll('#deployRows tr')]; let found = 0; rows.forEach(row => { const match = row.innerText.toLowerCase().includes(q); row.style.display = !q || match ? '' : 'none'; if (!q || match) found++; }); notify(q ? `${found} deployment row(s) match “${event.target.value}”.` : 'Showing all deployments.'); } });
-document.getElementById('period').addEventListener('change', event => notify('Selected period: ' + ({'7':'Last 7 days','24':'Last 24 hours','30':'Last 30 days'}[event.target.value]) + '. Chart uses illustrative sample data.'));
-document.getElementById('exportBtn').addEventListener('click', () => {
+document.getElementById('refresh')?.addEventListener('click', () => notify('Dashboard refreshed. Metrics are illustrative demo data.'));
+document.getElementById('notifications')?.addEventListener('click', () => notify('You have 2 demo alerts to review.'));
+document.getElementById('docsBtn')?.addEventListener('click', () => notify('Project notes: Terraform · AWS VPC · Docker · GitHub Actions · CloudWatch.'));
+document.getElementById('deployBtn')?.addEventListener('click', () => notify('Deployment workflow will be connected to GitHub Actions in Phase 4.'));
+document.getElementById('viewDeployments')?.addEventListener('click', () => { document.querySelector('[data-page="Deployments"]').click(); });
+document.getElementById('allAlerts')?.addEventListener('click', () => { document.querySelector('[data-page="Alerts"]').click(); });
+document.getElementById('search')?.addEventListener('keydown', event => { if (event.key === 'Enter') { const q = event.target.value.trim().toLowerCase(); const rows = [...document.querySelectorAll('#deployRows tr')]; let found = 0; rows.forEach(row => { const match = row.innerText.toLowerCase().includes(q); row.style.display = !q || match ? '' : 'none'; if (!q || match) found++; }); notify(q ? `${found} deployment row(s) match “${event.target.value}”.` : 'Showing all deployments.'); } });
+document.getElementById('period')?.addEventListener('change', event => notify('Selected period: ' + ({'7':'Last 7 days','24':'Last 24 hours','30':'Last 30 days'}[event.target.value]) + '. Chart uses illustrative sample data.'));
+document.getElementById('exportBtn')?.addEventListener('click', () => {
  const report = 'CloudOps Hub — Portfolio Demo Report\n\nInfrastructure resources tracked by Terraform: 12\nAvailability: 99.98% (illustrative demo value)\nSuccessful deployments: 24 (illustrative demo value)\nActive alerts: 2 (illustrative demo value)\n\nNote: This prototype is not connected to AWS telemetry yet.';
  const blob = new Blob([report], {type:'text/plain'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'cloudops-hub-demo-report.txt'; a.click(); URL.revokeObjectURL(url); notify('Demo report exported.');
 });
+
+async function loadCloudWatchMetrics() {
+  try {
+    const response = await fetch('/api/metrics');
+    if (!response.ok) throw new Error('API request failed');
+
+    const data = await response.json();
+
+    const apiStatus = document.getElementById('apiStatus');
+    if (apiStatus) apiStatus.textContent = 'Connected';
+
+    const updated = document.getElementById('metricUpdated');
+    if (updated) {
+      updated.textContent = data.updated_at
+        ? new Date(data.updated_at).toLocaleString()
+        : 'No metric timestamp';
+    }
+
+    const metrics = [
+      ['cpu', data.metrics.cpu_percent],
+      ['memory', data.metrics.memory_percent],
+      ['disk', data.metrics.disk_percent]
+    ];
+
+    for (const [name, value] of metrics) {
+      const valueElement = document.getElementById(name + 'Value');
+      const barElement = document.getElementById(name + 'Bar');
+
+      if (value === null || value === undefined) {
+        valueElement.textContent = 'N/A';
+        barElement.style.width = '0%';
+      } else {
+        const percentage = Math.max(0, Math.min(100, Number(value)));
+        valueElement.textContent = percentage.toFixed(2) + '%';
+        barElement.style.width = percentage + '%';
+      }
+    }
+  } catch (error) {
+    console.error('CloudWatch metrics error:', error);
+    const apiStatus = document.getElementById('apiStatus');
+    if (apiStatus) apiStatus.textContent = 'Connection error';
+    notify('Unable to refresh AWS metrics. Please try again.');
+  }
+}
+
+loadCloudWatchMetrics();
+setInterval(loadCloudWatchMetrics, 60000);
+
+const refreshMetricsButton = document.getElementById('refreshMetrics');
+if (refreshMetricsButton) {
+  refreshMetricsButton.addEventListener('click', loadCloudWatchMetrics);
+}
+
 </script>
 </body>
 </html>

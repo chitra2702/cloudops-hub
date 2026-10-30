@@ -13,3 +13,16 @@ crash.log
 .vscode/
 .idea/
 app/Dockerfile.save
+
+# Project backups
+*.backup
+*.pre-live-metrics
+*.save
+
+# Project backups
+*.backup
+*.pre-live-metrics
+*.save
+
+# Local dashboard backups
+*.before-*

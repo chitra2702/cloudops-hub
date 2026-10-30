@@ -1,7 +1,8 @@
 services:
   cloudops-hub:
     build:
-      context: ./app
+      context: .
+      dockerfile: app/Dockerfile
     container_name: cloudops-hub
     ports:
       - "8080:80"
